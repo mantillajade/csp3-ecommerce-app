@@ -86,13 +86,12 @@ const Login = () => {
   }
 
   return (
-    user.id !== null ?
-    <Navigate to="/products" />
-    :
-    <Container className="mt-5">
-      <h1 className="text-center mb-4" style={{ color: '#2C3E50' }}>Log In</h1>
-      <div className="col-md-6 offset-md-3">
-        <Card className="border">
+    user.id !== null ? 
+    <Navigate to="/products" /> :
+    <Container className="d-flex justify-content-center align-items-start" style={{ minHeight: '90vh' }}>
+      <div className="col-md-6 mt-5"> {/* Adjusted margin top to move form higher */}
+        <h2 className="text-center mb-4" style={{ color: '#2C3E50' }}>Log In</h2>
+        <Card className="border" style={{ borderRadius: '0', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
           <Card.Body>
             <Form onSubmit={authenticate}>
               <Form.Group className="mb-3" controlId="formEmail">
@@ -102,6 +101,11 @@ const Login = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
+                  style={{
+                    borderRadius: '0',  // Sharp edges for consistency
+                    border: '1px solid #ddd',
+                    backgroundColor: '#f9f9f9'  // Light background for inputs
+                  }}
                 />
               </Form.Group>
 
@@ -112,34 +116,36 @@ const Login = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
+                  style={{
+                    borderRadius: '0',  // Sharp edges for consistency
+                    border: '1px solid #ddd',
+                    backgroundColor: '#f9f9f9'  // Light background for inputs
+                  }}
                 />
               </Form.Group>
 
-              <div className="bg-light mx-n3 p-3 mt-4" style={{ 
-                marginLeft: '-1rem', 
-                marginRight: '-1rem', 
-                marginBottom: '-1rem',
-                borderTop: '1px solid #dee2e6',
-                borderBottomLeftRadius: 'calc(0.375rem - 1px)',
-                borderBottomRightRadius: 'calc(0.375rem - 1px)'
-              }}>
+              <div className="d-flex justify-content-center">
                 <Button 
                   variant="primary" 
                   type="submit" 
                   disabled={isButtonDisabled}
                   style={{ 
-                    width: 'auto',
-                    borderRadius: '0'  // This removes the border radius
-                  }}
+                    width: 'auto', 
+                    borderRadius: '0', 
+                    backgroundColor: '#8B008B', 
+                    borderColor: '#8B008B',
+                    padding: '10px 20px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'  // Button shadow for contrast
+                  }} 
                 >
-                  Submit
+                  Log In
                 </Button>
               </div>
             </Form>
           </Card.Body>
         </Card>
-        <div className="text-center mt-3">
-          Don't have an account yet? <Link to="/register">Click here</Link> to register.
+        <div className="text-center mt-3" style={{ fontSize: '14px' }}>
+          Don't have an account yet? <Link to="/register" style={{ color: '#8B008B' }}>Click here</Link> to register.
         </div>
       </div>
     </Container>

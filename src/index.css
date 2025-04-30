@@ -5,7 +5,104 @@ body {
   font-family: 'Arial', sans-serif; /* Updated font for text */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f7fb;  /* Light background for contrast */
+  color: #333;  /* Dark text color for readability */
+  padding: 20px;
 }
+
+.product-card {
+  background-color: #fff;  /* White background for contrast */
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);  /* Light shadow to elevate the card */
+  border-radius: 12px;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.05); /* Slight scale-up on hover for interactivity */
+  box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.15);  /* Enhanced shadow on hover */
+}
+
+.product-card h3 {
+  font-family: 'Georgia', serif; /* Serif font for headings */
+  font-weight: bold;  /* Stronger weight for emphasis */
+  font-size: 1.25rem; /* Larger font for titles */
+}
+
+.product-card p {
+  font-family: 'Arial', sans-serif; /* Body text uses sans-serif */
+  font-size: 1rem;
+  color: #666; /* Lighter color for description text */
+}
+
+.product-card .price {
+  color: #FF6B00; /* Accent color for price */
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.banner {
+  background-color: #101820; /* Dark background for contrast */
+  color: white;  /* White text for readability */
+  padding: 5rem 2rem;
+  text-align: center;
+  border-radius: 12px;
+}
+
+.banner h1 {
+  font-family: 'Georgia', serif;
+  font-size: 2.5rem; /* Larger heading size */
+  font-weight: 700; /* Bold weight for emphasis */
+}
+
+.banner p {
+  font-family: 'Arial', sans-serif; /* Body text */
+  color: #ccc; /* Lighter text color for description */
+  font-size: 1.1rem;
+}
+
+.banner button {
+  background-color: #FF6B00; /* Techy button color */
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.banner button:hover {
+  background-color: #FF4500; /* Darker shade on hover */
+}
+
+/* For buttons */
+button {
+  background-color: #0d6efd;  /* Strong blue button for call-to-action */
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0046b8;  /* Darker blue for hover effect */
+}
+
+/* Links */
+a {
+  color: #0d6efd;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #0046b8; /* Darker blue on hover */
+}
+
+
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Georgia', serif; /* Updated font for headings */

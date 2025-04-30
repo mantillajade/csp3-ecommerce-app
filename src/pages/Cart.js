@@ -9,8 +9,6 @@ export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
   const notyf = new Notyf();
 
-
-
   useEffect(() => {
     fetchCart();
   }, []);
@@ -20,8 +18,6 @@ export default function Cart() {
       fetchProductDetails();
     }
   }, [cart]);
-
-
 
   const fetchCart = async () => {
     try {
@@ -65,7 +61,7 @@ export default function Cart() {
 
   const handleQuantityChange = async (productId, currentQuantity, action) => {
     let newQuantity = action === 'increase' ? currentQuantity + 1 : currentQuantity - 1;
-    
+
     // Don't allow quantity less than 1
     if (newQuantity < 1) return;
 
@@ -101,103 +97,103 @@ export default function Cart() {
   };
 
   const handleRemoveItem = async (productId) => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/cart/${productId}/remove-from-cart`, {
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setCart(prevCart => ({
-            ...prevCart,
-            cartItems: data.updatedCart.cartItems,
-            totalPrice: data.updatedCart.totalPrice
-          }));
-          notyf.success('Item removed from cart successfully');
-        } else {
-          notyf.error(data.message || 'Failed to remove item from cart');
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/cart/${productId}/remove-from-cart`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
-      } catch (error) {
-        console.error('Error removing item from cart:', error);
-        notyf.error('An error occurred while removing item from cart');
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setCart(prevCart => ({
+          ...prevCart,
+          cartItems: data.updatedCart.cartItems,
+          totalPrice: data.updatedCart.totalPrice
+        }));
+        notyf.success('Item removed from cart successfully');
+      } else {
+        notyf.error(data.message || 'Failed to remove item from cart');
       }
-    };
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+      notyf.error('An error occurred while removing item from cart');
+    }
+  };
 
-    const handleClearCart = async () => {
-       try {
-         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/cart/clear-cart`, {
-           method: 'PUT',
-           headers: {
-             'Authorization': `Bearer ${localStorage.getItem('token')}`
-           }
-         });
+  const handleClearCart = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/cart/clear-cart`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
 
-         const data = await response.json();
+      const data = await response.json();
 
-         if (response.ok) {
-           setCart(data.cart);
-           notyf.success('Cart cleared successfully');
-         } else {
-           notyf.error(data.message || 'Failed to clear cart');
-         }
-       } catch (error) {
-         console.error('Error clearing cart:', error);
-         notyf.error('An error occurred while clearing the cart');
-       }
-     };
+      if (response.ok) {
+        setCart(data.cart);
+        notyf.success('Cart cleared successfully');
+      } else {
+        notyf.error(data.message || 'Failed to clear cart');
+      }
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+      notyf.error('An error occurred while clearing the cart');
+    }
+  };
 
-     if (isLoading) {
-         return (
-           <Container className="mt-5">
-             <h2>Loading...</h2>
-           </Container>
-         );
-       }
+  if (isLoading) {
+    return (
+      <Container className="mt-5">
+        <h2>Loading...</h2>
+      </Container>
+    );
+  }
 
-       if (!cart || !cart.cartItems || cart.cartItems.length === 0) {
-         return (
-           <Container className="mt-5 text-center">
-             
-             <p className="h4 mb-4">Your cart is empty! <Link to="/products">Start shopping</Link>.</p>
-           </Container>
-         );
-       }
+  if (!cart || !cart.cartItems || cart.cartItems.length === 0) {
+    return (
+      <Container className="mt-5 text-center">
+        <p className="h4 mb-4">Your cart is empty! <Link to="/products">Start shopping</Link>.</p>
+      </Container>
+    );
+  }
 
-       const handleCheckout = async () => {
-           try {
-             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/orders/checkout`, {
-               method: 'POST',
-               headers: {
-                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-               }
-             });
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/orders/checkout`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
 
-             const data = await response.json();
+      const data = await response.json();
 
-             if (response.ok) {
-               notyf.success('Order placed successfully');
-               // Update the cart state to empty after successful checkout
-               setCart(prevCart => ({
-                 ...prevCart,
-                 cartItems: [],
-                 totalPrice: 0
-               }));
-             } else {
-               notyf.error(data.message || 'Failed to place order');
-             }
-           } catch (error) {
-             console.error('Error during checkout:', error);
-             notyf.error('An error occurred while processing your order');
-           }
-         };
+      if (response.ok) {
+        notyf.success('Order placed successfully');
+        // Update the cart state to empty after successful checkout
+        setCart(prevCart => ({
+          ...prevCart,
+          cartItems: [],
+          totalPrice: 0
+        }));
+      } else {
+        notyf.error(data.message || 'Failed to place order');
+      }
+    } catch (error) {
+      console.error('Error during checkout:', error);
+      notyf.error('An error occurred while processing your order');
+    }
+  };
 
   return (
-      <Container className="mt-5">
-        <h2 className="mb-4">Your Shopping Cart</h2>
+    <Container className="mt-5">
+      <h2 className="mb-4">Your Shopping Cart</h2>
+      <div style={{ backgroundColor: '#f5f7fa', padding: '2rem', borderRadius: '12px', boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)' }}>
         <Table responsive striped bordered>
           <thead className="bg-dark text-white">
             <tr>
@@ -257,21 +253,24 @@ export default function Cart() {
         </Table>
 
         <div className="d-flex justify-content-between align-items-center mt-4">
-        <h3>Total: ₱{cart.totalPrice}</h3>
-        <div>
-          <Button
-            variant="success"
-            className="me-2"
-            onClick={handleCheckout}
-          >
-            Checkout
-          </Button>
-          <Button
-            variant="danger"
-            onClick={handleClearCart}
-          >
-            Clear Cart
-          </Button>
+          <h3>Total: ₱{cart.totalPrice}</h3>
+          <div>
+            <Link to="/orders">
+              <Button
+                variant="success"
+                className="me-2"
+                onClick={handleCheckout}
+              >
+                Checkout
+              </Button>
+            </Link>
+            <Button
+              variant="danger"
+              onClick={handleClearCart}
+            >
+              Clear Cart
+            </Button>
+          </div>
         </div>
       </div>
     </Container>

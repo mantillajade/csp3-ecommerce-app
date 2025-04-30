@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { Notyf } from 'notyf';
 
@@ -36,6 +37,7 @@ export default function AddToCart({ productId, quantity, price }) {
   };
 
   return (
+    <Link to="/products">
     <Button 
       variant="primary" 
       onClick={handleAddToCart}
@@ -46,5 +48,6 @@ export default function AddToCart({ productId, quantity, price }) {
     >
       Add to Cart
     </Button>
+    </Link>
   );
 }

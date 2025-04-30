@@ -1,226 +1,163 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Form, Container, Card } from 'react-bootstrap';
-import { Navigate, Link } from 'react-router-dom';
-import UserContext from '../context/UserContext';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Container, Card, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { Notyf } from 'notyf';
-import { useNavigate } from 'react-router-dom';
-
 
 const Register = () => {
-  const navigate = useNavigate();
-  const { user } = useContext(UserContext);
   const notyf = new Notyf();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobileNo, setMobileNo] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isActive, setIsActive] = useState(false);
-
-  const buttonStyle = {
-      backgroundColor: isActive ? '#198754' : '#ff6b6b',
-      color: 'white',
-      textAlign: 'left',
-      padding: '10px 15px',
-      border: 'none',
-      borderRadius: '4px',
-      width: '100%',
-      marginBottom: '1rem',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-      transition: 'all 0.3s ease'
-    };
-
-    
- 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   useEffect(() => {
-    if (
-      firstName !== "" &&
-      lastName !== "" &&
-      email !== "" &&
-      mobileNo !== "" &&
-      password !== "" &&
-      confirmPassword !== "" &&
-      mobileNo.length === 11 &&
-      password === confirmPassword &&
-      email.includes('@')
-    ) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }, [firstName, lastName, email, mobileNo, password, confirmPassword]);
+    setIsButtonDisabled(!(email && password && confirmPassword && firstName && lastName));
+  }, [email, password, confirmPassword, firstName, lastName]);
 
-  const handleNameChange = (setter) => (e) => {
-    const value = e.target.value;
-    const regex = /^[A-Za-z\s]*$/;
-    if (regex.test(value)) {
-      setter(value);
+  const handleRegister = (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      notyf.error("Passwords don't match");
+      return;
     }
+
+    if (!email.includes('@')) {
+      notyf.error('Invalid Email');
+      return;
+    }
+
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/users/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName, lastName, email, password })
+    })
+      .then(async response => {
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Registration failed');
+        }
+        notyf.success('Registration successful');
+        // Handle redirection or success state here
+      })
+      .catch(error => {
+        notyf.error(error.message || 'An error occurred during registration');
+      });
   };
 
-  function registerUser(e) {
-        e.preventDefault();
+  const sectionStyle = {
+    backgroundColor: '#f5f7fa',
+    padding: '2rem 1rem',
+    borderRadius: '10px',
+  };
 
-        if (!email.includes('@')) {
-          notyf.error('Invalid Email');
-          return;
-        }
-
-        fetch(`${process.env.REACT_APP_API_BASE_URL}/users/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': "application/json"
-          },
-          body: JSON.stringify({
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            mobileNo: mobileNo,
-            password: password
-          })
-        })
-        .then(async response => {
-          const data = await response.json();
-          
-          if (!response.ok) {
-            throw new Error(data.error || 'Registration failed');
-          }
-          
-          return data;
-        })
-        .then(data => {
-          if (data.message === "Registered Successfully") {
-            notyf.success({
-              message: 'Registration Successful! Redirecting to login...',
-              duration: 2000,
-              dismissible: false
-            });
-            
-            setFirstName("");
-            setLastName("");
-            setEmail("");
-            setMobileNo("");
-            setPassword("");
-            setConfirmPassword("");
-            
-            // Redirect to login page after 2 seconds
-            setTimeout(() => {
-              navigate('/login');
-            }, 2000);
-          }
-        })
-        .catch(error => {
-          notyf.error({
-            message: error.message,
-            duration: 2000,
-            dismissible: true
-          });
-        });
-    }
-
-  if (user.id !== null) {
-    return <Navigate to="/courses" />;
-  }
+  const titleStyle = {
+    fontFamily: "'Roboto', sans-serif",
+    fontWeight: '600',
+    fontSize: '1.75rem',
+    color: '#333',
+    marginBottom: '1.5rem',
+  };
 
   return (
-    <Container className="mt-5">
-      <h1 className="text-center mb-4">Register</h1>
-      <div className="col-md-6 offset-md-3">
-        <Card className="p-4">
-          <Form onSubmit={registerUser}>
-            <Form.Group className="mb-3">
-              <Form.Label>First Name:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your First Name"
-                value={firstName}
-                onChange={handleNameChange(setFirstName)}
-              />
-            </Form.Group>
+    <Container style={sectionStyle}>
+      <h2 style={titleStyle} className="text-center">Register</h2>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Last Name:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your Last Name"
-                value={lastName}
-                onChange={handleNameChange(setLastName)}
-              />
-            </Form.Group>
+      <Card className="border mx-auto" style={{
+        maxWidth: '500px',
+        borderRadius: '12px',
+        boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
+        backgroundColor: '#fff',
+      }}>
+        <Card.Body>
+          <Form onSubmit={handleRegister}>
+            <Row>
+    <Col>
+      <Form.Group className="mb-3" controlId="formFirstName">
+        <Form.Label>First Name</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="First name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          style={{ borderRadius: '8px', fontSize: '0.95rem' }}
+        />
+      </Form.Group>
+    </Col>
+  </Row>
+  
+  <Row>
+    <Col>
+      <Form.Group className="mb-3" controlId="formLastName">
+        <Form.Label>Last Name</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Last name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          style={{ borderRadius: '8px', fontSize: '0.95rem' }}
+        />
+      </Form.Group>
+    </Col>
+  </Row>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Email:</Form.Label>
+            <Form.Group className="mb-3" controlId="formEmail">
+              <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Enter email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ borderRadius: '8px', fontSize: '0.95rem' }}
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Mobile Number:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your 11 digit mobile number"
-                value={mobileNo}
-                onChange={e => setMobileNo(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Password:</Form.Label>
+            <Form.Group className="mb-3" controlId="formPassword">
+              <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Enter your password"
+                placeholder="Password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{ borderRadius: '8px', fontSize: '0.95rem' }}
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Verify Password:</Form.Label>
+            <Form.Group className="mb-3" controlId="formConfirmPassword">
+              <Form.Label>Confirm Password</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Verify your password"
+                placeholder="Confirm password"
                 value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                style={{ borderRadius: '8px', fontSize: '0.95rem' }}
               />
             </Form.Group>
 
-            <div className="bg-light mx-n4 p-3" style={{ 
-              marginLeft: '-1.5rem', 
-              marginRight: '-1.5rem', 
-              marginBottom: '-1.5rem',
-              borderTop: '1px solid #dee2e6',
-              borderBottomLeftRadius: 'calc(0.375rem - 1px)',
-              borderBottomRightRadius: 'calc(0.375rem - 1px)'
-            }}>
-              <button 
-                type="submit" 
-                className={`btn ${isActive ? 'btn-primary' : 'btn-danger'}`}
-                disabled={!isActive}
-                style={{
-                  textAlign: 'left',
-                  paddingLeft: '15px',
-                  paddingRight: '15px',
-                  width: 'auto',
-                  display: 'inline-block'
-                }}
-              >
-                {isActive ? 'Register' : 'Please enter your registration details'}
-              </button>
-            </div>
-
-            
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={isButtonDisabled}
+              style={{
+                width: '100%',
+                padding: '0.6rem',
+                fontSize: '1rem',
+                borderRadius: '6px',
+                backgroundColor: '#0056b3',
+                border: 'none',
+              }}
+            >
+              Register
+            </Button>
           </Form>
-        </Card>
-        <div className="text-center">
-          Already have an account? <Link to="/login">Click here</Link> to log in.
-        </div>
+        </Card.Body>
+      </Card>
+
+      <div className="text-center mt-3">
+        Already have an account? <Link to="/login" style={{ color: '#007bff' }}>Click here</Link> to login.
       </div>
     </Container>
   );

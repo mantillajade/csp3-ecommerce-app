@@ -98,15 +98,15 @@ export default function Orders() {
     <Container className="mt-5">
       <h2 className="text-center mb-4">Order History</h2>
       {orders.map((order, index) => (
-        <Card key={order._id} className="mb-4">
+        <Card key={order._id} className="mb-4" style={{ backgroundColor: '#f5f7fa', borderRadius: '12px', boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)' }}>
           <Card.Header 
             className="bg-dark text-white" 
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', padding: '1rem' }}
             onClick={() => toggleOrderDetails(order._id)}
           >
             Order #{index + 1} - Purchased on: {formatDate(order.orderedOn)} (Click for Details)
           </Card.Header>
-          <Card.Body>
+          <Card.Body style={{ padding: '1.5rem' }}>
             <div className="mb-2">Items:</div>
             <ul style={{ listStyleType: 'circle', paddingLeft: '20px' }}>
               {order.productsOrdered.map((product) => (
@@ -125,9 +125,9 @@ export default function Orders() {
                   <span style={{ color: '#666' }}> - Quantity: {product.quantity}</span>
                   
                   <Collapse in={expandedOrders[order._id]}>
-                    <div className="mt-2 mb-3 ps-3">
+                    <div className="mt-2 mb-3 ps-3" style={{ backgroundColor: '#f0f0f0', padding: '1rem', borderRadius: '8px' }}>
                       <div style={{ color: '#666' }}>
-                        Price: ₱{products[product.productId]?.price || '...'}<br/>
+                        Price: ₱{products[product.productId]?.price || '...'}<br />
                         Description: {products[product.productId]?.description || 'Loading...'}
                       </div>
                     </div>
@@ -135,7 +135,7 @@ export default function Orders() {
                 </li>
               ))}
             </ul>
-            <div style={{ marginTop: '15px', color: '#ff6b6b' }}>
+            <div style={{ marginTop: '15px', color: '#ff6b6b', fontWeight: 'bold' }}>
               Total: ₱{order.totalPrice}
             </div>
           </Card.Body>

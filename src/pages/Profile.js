@@ -64,22 +64,22 @@ export default function Profile() {
 
   return (
     <div style={{ position: 'relative' }}>
-      <Container className="mt-5">
-        <Row className="justify-content-center">
+      <Container className="mt-5 d-flex align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
+        <Row className="w-100 justify-content-center">
           <Col md={6}>
-            <Card className="text-white bg-primary mb-3">
-              <Card.Body>
-                <Card.Title className="mb-4">Profile</Card.Title>
+            <Card className="mb-4" style={{ backgroundColor: '#f5f7fa', borderRadius: '12px', boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)' }}>
+              <Card.Body className="text-center">
+                <Card.Title className="mb-4" style={{ color: '#2e3b4e', fontWeight: 'bold' }}>Profile</Card.Title>
                 {details && (
                   <>
-                    <Card.Text className="mb-4">
+                    <Card.Text className="mb-4" style={{ fontSize: '1.1rem' }}>
                       <strong>{details.firstName} {details.lastName}</strong>
                     </Card.Text>
                     <hr className="bg-light" />
-                    <Card.Text className="mt-4">
+                    <Card.Text className="mt-4" style={{ color: '#6c757d' }}>
                       <strong>Contacts</strong>
                     </Card.Text>
-                    <ul>
+                    <ul style={{ listStyleType: 'none', paddingLeft: '0' }}>
                       <li>Email: {details.email}</li>
                       <li>Mobile No: {details.mobileNo}</li>
                     </ul>
@@ -96,11 +96,13 @@ export default function Profile() {
           backgroundColor: '#8B008B',
           border: 'none',
           position: 'fixed',
-          left: '0',
-          marginLeft: '0',
-          top: '450px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          bottom: '20px',
           zIndex: 1000,
-          borderRadius: '0'
+          borderRadius: '50px',
+          padding: '10px 20px',
+          fontSize: '1rem'
         }}
         onClick={() => setShowResetPassword(true)}
       >

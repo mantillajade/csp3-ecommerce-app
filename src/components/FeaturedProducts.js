@@ -28,9 +28,25 @@ export default function FeaturedProducts() {
       });
   }, []);
 
+  // Light background to contrast with the Banner component
+  const sectionStyle = {
+    backgroundColor: '#f5f7fa',  // Light background for contrast
+    padding: '5rem 2rem',         // Adequate padding
+    borderRadius: '12px',         // Rounded corners for modern look
+    boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)',  // Light shadow
+  };
+
+  const titleStyle = {
+    fontFamily: "'Roboto', sans-serif",
+    fontWeight: '600',            // Lighter weight for the title
+    fontSize: '2.5rem',           // Slightly smaller font size for contrast
+    color: '#333',                // Darker text for readability
+    marginBottom: '3rem',         // Increased margin for better separation
+  };
+
   return (
-    <Container>
-      <h2 className="text-center mb-5">Featured Products</h2>
+    <Container style={sectionStyle}>
+      <h2 style={titleStyle} className="text-center">Featured Products</h2>
       <Row className="g-4">
         {previews.map(product => (
           <PreviewProducts 

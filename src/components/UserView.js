@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Accordion } from 'react-bootstrap';
 import ProductCard from './ProductCard';
 
 export default function UserView({ productsData = [] }) {
@@ -108,6 +108,10 @@ export default function UserView({ productsData = [] }) {
       <h2 className="mb-4">Product Search</h2>
       
       <Form>
+  <Accordion className="mb-4">
+    <Accordion.Item eventKey="0">
+      <Accordion.Header>Search by Name</Accordion.Header>
+      <Accordion.Body>
         <Form.Group className="mb-3">
           <Form.Label>Product Name:</Form.Label>
           <Form.Control
@@ -115,8 +119,21 @@ export default function UserView({ productsData = [] }) {
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
           />
+          <Button 
+            variant="primary" 
+            className="mt-2" 
+            onClick={handleSearchByName}
+            style={searchButtonStyle}
+          >
+            Search by Name
+          </Button>
         </Form.Group>
+      </Accordion.Body>
+    </Accordion.Item>
 
+    <Accordion.Item eventKey="1">
+      <Accordion.Header>Search by Price</Accordion.Header>
+      <Accordion.Body>
         <Form.Group className="mb-3">
           <Form.Label>Minimum Price:</Form.Label>
           <div className="d-flex">
@@ -165,32 +182,28 @@ export default function UserView({ productsData = [] }) {
           </div>
         </Form.Group>
 
-        <div className="mb-5">
-            <Button 
-              variant="primary" 
-              className="me-2" 
-              onClick={handleSearchByName}
-              style={searchButtonStyle}
-            >
-              Search by Name
-            </Button>
-            <Button 
-              variant="primary" 
-              className="me-2" 
-              onClick={handleSearchByPrice}
-              style={searchButtonStyle}
-            >
-              Search by Price
-            </Button>
-            <Button 
-              variant="danger" 
-              onClick={handleClear}
-              style={searchButtonStyle}
-            >
-              Clear
-            </Button>
-          </div>
-      </Form>
+        <Button 
+          variant="primary" 
+          onClick={handleSearchByPrice}
+          style={searchButtonStyle}
+        >
+          Search by Price
+        </Button>
+      </Accordion.Body>
+    </Accordion.Item>
+  </Accordion>
+
+  <div className="mb-4">
+    <Button 
+      variant="danger" 
+      onClick={handleClear}
+      style={searchButtonStyle}
+    >
+      Clear All
+    </Button>
+  </div>
+</Form>
+
 
       <hr />
 

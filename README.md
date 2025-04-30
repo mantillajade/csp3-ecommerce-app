@@ -10,6 +10,8 @@ Images - Reyes
 Cart - Reyes
 Order - Reyes
 Show order history admin - Reyes
+Stretch Goals - Mantilla
+	Accordion, Routing, UI Update
 
 admin user
 
